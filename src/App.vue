@@ -8,10 +8,6 @@
         <Buscar/>
         <div class="cards-pokemon">
           <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
         </div>
       </div>
     
@@ -57,9 +53,10 @@
     align-items: center;
   }
 
-  .cards-pokemon{
+  .cards-pokemon ul{
     width: 100%;
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 16px;
     justify-content: space-between;
   }

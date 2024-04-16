@@ -1,5 +1,21 @@
+<script setup>
+import { onMounted, reactive, ref } from 'vue';
+
+
+let pokemons = reactive(ref());
+let urlSprites = ref('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/');
+
+onMounted(()=>{
+    fetch('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0')
+    .then(resposta => resposta.json())
+    .then(resposta => pokemons = resposta.results)
+})
+
+</script>
+
+
 <template>
-    <div class="card">
+    <!-- <div class="card">
         <img src="/src/assets/pokémon.png" alt="">
 
         <div class="pokemon-info">
@@ -12,18 +28,32 @@
         </div>
 
         <button>Ver Detalhes</button>
-    </div>
+    </div> -->
+
+    <ul>
+        <li class="card" v-for="pokemon in pokemons" :key="pokemon.name">
+            
+            <img :src="urlSprites + pokemon.url.split('/')[6] + '.png'" alt=""> 
+
+            <div class="pokemon-info">
+                <h3>{{ pokemon.name }}</h3>
+                <p>ID:</p>
+                <div class="pokemon-tipo">
+                    <span class="poketipo">Elétrico</span>
+                    <span class="poketipo red">Fogo</span>
+                </div>
+            </div>
+
+            <button>Ver Detalhes</button>
+        </li>
+    </ul>
 </template>
-
-<script>
-
-</script>
 
 
 <style>
     .card{
         width: 100%;
-        max-width: 12.25rem;
+        max-width: 16.25rem;
         background-color: #4B4B4D;
         display: flex;
         flex-direction: column;
