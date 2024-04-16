@@ -23,7 +23,7 @@
 
 
 <template>
-    <div class="container">
+    <div class="menu-content">
         <ul>
             <li v-for="item in menu" :key="item">
                 <img :src="item.imagemUrl" alt="icone do elemento">
@@ -35,7 +35,12 @@
 
 
 <style scoped>
-    ul{
+    .menu-content{
+        width: 100%;
+        max-width: 150px;
+    }
+
+    .menu-content ul{
         margin-top: 2rem;
     }
 

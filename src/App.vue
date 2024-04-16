@@ -1,7 +1,10 @@
 <template>
   <Header/>
-  <MenuLateral/>
-  <Buscar/>
+  <main class="container">
+    <MenuLateral/>
+    <Buscar/>
+  </main>
+  
 </template>
 
 
@@ -10,6 +13,7 @@
   import Header from './components/Header.vue';
   import MenuLateral from './components/MenuLateral.vue';
   import Buscar from './components/Buscar.vue';
+  
   export default {
     name: 'App',
     components: {
@@ -23,5 +27,10 @@
 
 
 <style>
+
+  main{
+    display: flex;
+    gap: 4rem;
+  }
 
 </style>
