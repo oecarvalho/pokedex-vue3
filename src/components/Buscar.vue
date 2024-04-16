@@ -13,6 +13,7 @@
         margin-top: 1.5rem;
         background-color: #4B4B4D;
         width: 100%;
+       
         height: 24px;
         padding: 1rem 1.5rem;
         border-radius: .5rem;
@@ -21,6 +22,7 @@
         background-repeat: no-repeat;
         background-position: center right 1.25rem;
         border: none;
+        margin-bottom: 36px;
     }
 
     input::placeholder{
