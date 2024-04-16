@@ -9,13 +9,13 @@
 </script>
 
 <style scoped>
-    input{
+    input{ 
+        width: 100%;
+        max-width: 1050px;
         margin-top: 1.5rem;
         background-color: #4B4B4D;
-        width: 100%;
-       
         height: 24px;
-        padding: 1rem 1.5rem;
+        padding: 1rem;
         border-radius: .5rem;
         color: white;
         background-image: url('/src/assets/search.svg');
@@ -27,6 +27,7 @@
 
     input::placeholder{
         color: white;
+        
     }
 
     input:focus{

@@ -6,7 +6,13 @@
       <MenuLateral/>
       <div class="principal">
         <Buscar/>
-        <Card/>
+        <div class="cards-pokemon">
+          <Card/>
+          <Card/>
+          <Card/>
+          <Card/>
+          <Card/>
+        </div>
       </div>
     
     </main>
@@ -41,12 +47,20 @@
   main{
     width: 100%;
     display: flex;
-    gap: 4rem;
+    gap: 2rem;
   }
 
   .principal{
     width: 100%;
-    max-width: 1050px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
+  .cards-pokemon{
+    width: 100%;
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+  }
 </style>
