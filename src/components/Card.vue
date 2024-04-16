@@ -36,7 +36,7 @@ onMounted(()=>{
             <img :src="urlSprites + pokemon.url.split('/')[6] + '.png'" alt=""> 
 
             <div class="pokemon-info">
-                <h3>{{ pokemon.name }}</h3>
+                <h4>{{ pokemon.name }}</h4>
                 <p>ID: {{ pokemon.url.split('/')[6] }}</p>
                 <div class="pokemon-tipo">
                     <span class="poketipo">Elétrico</span>
@@ -70,8 +70,10 @@ onMounted(()=>{
         text-align: center;
     }
 
-    .pokemon-info h3{
+    .pokemon-info h4{
         color: white;
+        text-align: center;
+        
     }
 
     p{
@@ -84,6 +86,7 @@ onMounted(()=>{
         gap: 8px;
         align-items: center;
         margin-bottom: 8px;
+        justify-content: center;
     }
 
     span{
@@ -105,6 +108,8 @@ onMounted(()=>{
     }
 
     button{
+        width: 100%;
+        max-width: 220px;
         background-color: #FFCB05;
         color: #343232;
         border-radius: 8px;
