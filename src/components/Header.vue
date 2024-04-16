@@ -18,7 +18,7 @@
     
 </script>
 
-<style>
+<style scoped>
     header{
         width: 100%;
         background-color: #4B4B4D;
