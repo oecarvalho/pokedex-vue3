@@ -37,7 +37,7 @@ onMounted(()=>{
 
             <div class="pokemon-info">
                 <h3>{{ pokemon.name }}</h3>
-                <p>ID:</p>
+                <p>ID: {{ pokemon.url.split('/')[6] }}</p>
                 <div class="pokemon-tipo">
                     <span class="poketipo">Elétrico</span>
                     <span class="poketipo red">Fogo</span>
