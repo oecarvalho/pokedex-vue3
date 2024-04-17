@@ -11,6 +11,15 @@ onMounted( async () => {
         const resposta = await fetch('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0');
         const dados = await resposta.json();
         pokemons.value = dados.results;
+
+        await Promise.all(
+            pokemons.value.map(async (pokemon) => {
+                const detalhesResposta = await fetch(pokemon.url);
+                const detalhesDados = await detalhesResposta.json();
+                pokemon.id = detalhesDados.id;
+                pokemon.types = detalhesDados.types;
+            })
+        );
     } catch (error){
         console.error("erro na busca de pokémons:", error);
     }
@@ -20,11 +29,11 @@ onMounted( async () => {
 const filtroPokemons = computed(()=>{
     if (pokemons.value && campoDeBusca.value) {
         const busca = campoDeBusca.value.toLowerCase().trim();
-        if (!isNaN(busca)) { // Verifica se a busca é um número
+        if (!isNaN(busca)) { 
             return pokemons.value.filter(pokemon => 
                 pokemon.url.split('/')[6].includes(busca)
             );
-        } else { // Se não for um número, filtra pelo nome
+        } else { 
             return pokemons.value.filter(pokemon => 
                 pokemon.name.toLowerCase().includes(busca)
             );
@@ -51,8 +60,11 @@ const filtroPokemons = computed(()=>{
                     <h4>{{ pokemon.name }}</h4> 
                     <p>ID: {{ pokemon.url.split('/')[6] }}</p>
                     <div class="pokemon-tipo"> 
-                        <span class="poketipo">Elétrico</span>
-                        <span class="poketipo red">Fogo</span>
+                        <span v-for="(type, index) in pokemon.types" 
+                        :key="index" 
+                        class="poketipo">
+                        {{ type.type.name }}
+                        </span>
                     </div>
                 </div>
 
@@ -119,7 +131,7 @@ const filtroPokemons = computed(()=>{
     }
 
     .poketipo{
-        background-color: #FFCB05;
+        background-color: #B3B3B3;
         border-radius: 8px;
         color: #000;
         padding: 4px 8px;
