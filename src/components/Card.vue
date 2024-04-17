@@ -18,13 +18,21 @@ onMounted( async () => {
 
 
 const filtroPokemons = computed(()=>{
-    if(pokemons.value && campoDeBusca.value){
-        return pokemons.value.filter(pokemon => 
-            pokemon.name.toLowerCase().includes(campoDeBusca.value.toLocaleLowerCase())
-        )
+    if (pokemons.value && campoDeBusca.value) {
+        const busca = campoDeBusca.value.toLowerCase().trim();
+        if (!isNaN(busca)) { // Verifica se a busca é um número
+            return pokemons.value.filter(pokemon => 
+                pokemon.url.split('/')[6].includes(busca)
+            );
+        } else { // Se não for um número, filtra pelo nome
+            return pokemons.value.filter(pokemon => 
+                pokemon.name.toLowerCase().includes(busca)
+            );
+        }
     }
     return pokemons.value;
 })
+
 </script>
 
 
