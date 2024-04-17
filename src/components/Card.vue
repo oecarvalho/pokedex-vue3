@@ -1,44 +1,34 @@
 <script setup>
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref, } from 'vue';
 
 
-let pokemons = reactive(ref());
+let pokemons = reactive(ref([]));
 let urlSprites = ref('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/');
 
-onMounted(()=>{
-    fetch('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0')
-    .then(resposta => resposta.json())
-    .then(resposta => pokemons = resposta.results)
+onMounted( async () => {
+    try{
+        const resposta = await fetch('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0');
+        const dados = await resposta.json();
+        pokemons.value = dados.results;
+        console.log(pokemons.value)
+    } catch (error){
+        console.error("erro na busca de pokémons:", error);
+    }
 })
 
 </script>
 
 
 <template>
-    <!-- <div class="card">
-        <img src="/src/assets/pokémon.png" alt="">
-
-        <div class="pokemon-info">
-            <h3>Pikachu</h3>
-            <p>ID: 101</p>
-            <div class="pokemon-tipo">
-                <span class="poketipo">Elétrico</span>
-                <span class="poketipo red">Fogo</span>
-            </div>
-        </div>
-
-        <button>Ver Detalhes</button>
-    </div> -->
-
     <ul>
         <li class="card" v-for="pokemon in pokemons" :key="pokemon.name">
             
-            <img :src="urlSprites + pokemon.url.split('/')[6] + '.png'" alt=""> 
+            <img :src="urlSprites + pokemon.url.split('/')[6] + '.png'" alt="">  
 
             <div class="pokemon-info">
-                <h4>{{ pokemon.name }}</h4>
+                <h4>{{ pokemon.name }}</h4> 
                 <p>ID: {{ pokemon.url.split('/')[6] }}</p>
-                <div class="pokemon-tipo">
+                <div class="pokemon-tipo"> 
                     <span class="poketipo">Elétrico</span>
                     <span class="poketipo red">Fogo</span>
                 </div>
