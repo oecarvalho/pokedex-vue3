@@ -1,72 +1,74 @@
 <script setup>
+import axios from "axios";
 import { onMounted, reactive, ref, computed } from 'vue';
 
+const pokeCards = reactive(ref([]));
 
-let pokemons = reactive(ref([]));
-let urlSprites = ref('https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/');
-let campoDeBusca = ref('');
-
-onMounted( async () => {
-    try{
-        const resposta = await fetch('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0');
-        const dados = await resposta.json();
-        pokemons.value = dados.results;
+onMounted(async ()=>{ 
+    try {
+        const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0');
+        const pokemons = response.data.results;
 
         await Promise.all(
-            pokemons.value.map(async (pokemon) => {
-                const detalhesResposta = await fetch(pokemon.url);
-                const detalhesDados = await detalhesResposta.json();
-                pokemon.id = detalhesDados.id;
-                pokemon.types = detalhesDados.types;
+            pokemons.map(async (pokemon) => {
+                const urlDetalhes = pokemon.url; //acessando a url de detalhes dos pokémons
+                const pokeDados = await axios.get(urlDetalhes);
+                const { name, id, sprites, types } = pokeDados.data;
+
+                const pokeCard = {//objeto com os dados necessários do pokémon
+                    nome: name,
+                    id: id,
+                    imagem: sprites.front_default,
+                    tipo: types[0].type.name
+                };
+                pokeCards.value.push(pokeCard);
             })
         );
-    } catch (error){
-        console.error("erro na busca de pokémons:", error);
+    } catch (error) {
+        console.error('Erro ao listar os pokémons:', error);
     }
-})
 
+}) 
 
-const filtroPokemons = computed(()=>{
-    if (pokemons.value && campoDeBusca.value) {
+let campoDeBusca = ref('');
+
+const filtroPokemon = computed(() => {
+    if (pokeCards.value && campoDeBusca.value) {
         const busca = campoDeBusca.value.toLowerCase().trim();
-        if (!isNaN(busca)) { 
-            return pokemons.value.filter(pokemon => 
-                pokemon.url.split('/')[6].includes(busca)
+        if (!isNaN(busca)) {
+            return pokeCards.value.filter(pokemon =>
+                pokemon.id.toString().includes(busca)
             );
-        } else { 
-            return pokemons.value.filter(pokemon => 
-                pokemon.name.toLowerCase().includes(busca)
+        } else {
+            return pokeCards.value.filter(pokemon =>
+                pokemon.nome.toLowerCase().includes(busca) ||
+                pokemon.tipo.toLowerCase().includes(busca)
             );
         }
     }
-    return pokemons.value;
-})
-
+    return pokeCards.value;
+});
 </script>
 
-
 <template>
-
     <div class="conteudo-principal">
 
         <input type="text" placeholder="Digite o nome ou id do Pokémon" v-model="campoDeBusca">
 
-        <ul>
-            <li class="card" v-for="pokemon in filtroPokemons" :key="pokemon.name">
-                
-                <img :src="urlSprites + pokemon.url.split('/')[6] + '.png'" alt="">  
+        <ul class="pokemon-list">
+            <li v-for="pokemon in filtroPokemon" :key="pokemon.id" class="card">
+                    <img :src="pokemon.imagem" :alt="'este pokémon é o: ' + pokemon.nome" /> 
 
-                <div class="pokemon-info">
-                    <h4>{{ pokemon.name }}</h4> 
-                    <p>ID: {{ pokemon.url.split('/')[6] }}</p>
-                    <div class="pokemon-tipo"> 
-                        <span v-for="(type, index) in pokemon.types" 
-                        :key="index" 
-                        class="poketipo">
-                        {{ type.type.name }}
-                        </span>
+                    <div class="pokemon-info">  
+                        <h4>{{ pokemon.nome }}</h4> 
+                        <p>ID: {{ pokemon.id }}</p>  
+
+                        <div class="pokemon-tipo">
+                            <span class="poketipo">  
+                                {{pokemon.tipo}}
+                            </span>
+                        </div>
                     </div>
-                </div>
 
                 <button>Ver Detalhes</button>
             </li>
@@ -100,6 +102,9 @@ const filtroPokemons = computed(()=>{
     .card img{
         margin-top: 28px;
         margin-bottom: 8px;
+        width: 100%;
+        max-width: 80px;
+        height: 60px;
     }
 
     .pokemon-info{
