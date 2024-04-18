@@ -13,15 +13,21 @@ onMounted(async ()=>{
             pokemons.map(async (pokemon) => {
                 const urlDetalhes = pokemon.url; //acessando a url de detalhes dos pokémons
                 const pokeDados = await axios.get(urlDetalhes);
-                const { name, id, sprites, types } = pokeDados.data;
+                const { name, id, sprites, types, game_indices, abilities } = pokeDados.data;
 
                 const tipos = types.map(type => type.type.name);
+                const game = game_indices.map(games => games.version.name);
+                const habilidades = abilities.map(ability => ability.ability.name)
+
+                
 
                 const pokeCard = {//objeto com os dados necessários do pokémon
                     nome: name,
                     id: id,
                     imagem: sprites.front_default,
-                    tipos: tipos
+                    tipos: tipos,
+                    games: game,
+                    poderes: habilidades
                 };
                 pokeCards.value.push(pokeCard);
             })
@@ -30,7 +36,29 @@ onMounted(async ()=>{
         console.error('Erro ao listar os pokémons:', error);
     }
 
-}) 
+})
+
+//tentativa de verificar as evoluções dos pokémons
+// onMounted(async ()=>{ 
+//     try {
+//         const response = await axios.get('https://pokeapi.co/api/v2/evolution-chain/');
+//         const evolucoes = response.data.results
+        
+//         await Promise.all(
+//             evolucoes.map(async (pokemon) => {
+//                 const urlEvolucaoDetalhes = pokemon.url; 
+//                 const pokeDadosEvoluidos = await axios.get(urlEvolucaoDetalhes);
+//                 const pokeEvolucao = pokeDadosEvoluidos.data.chain.evolves_to[0].species.name;
+//                 console.log(pokeEvolucao)
+                
+//             })
+//         );
+        
+//     } catch (error) {
+//         console.error('Erro ao listar os pokémons:2', error); 
+//     }
+// })
+
 
 let campoDeBusca = ref('');
 
@@ -50,6 +78,18 @@ const filtroPokemon = computed(() => {
     }
     return pokeCards.value;
 });
+
+let modalAberto = ref(false);
+let pokemonSelecionado = reactive({});
+
+const abrirModal = (pokemon) => {
+    pokemonSelecionado = pokemon;
+    modalAberto.value = true;
+};
+
+const fecharModal = () => {
+    modalAberto.value = false;
+};
 
 </script>
 
@@ -71,9 +111,43 @@ const filtroPokemon = computed(() => {
                         </div>
                 </div>
 
-                <button>Ver Detalhes</button>
+                <button @click="abrirModal(pokemon)">Ver Detalhes</button>
             </li>
         </ul>
+
+        <div class="modal" v-if="modalAberto">
+            <div class="modal-conteudo">
+                <div class="info-geral">
+
+                    <div class="poke-info">
+                        <img :src="pokemonSelecionado.imagem" :alt="'este pokémon é o: ' + pokemonSelecionado.imagem" /> 
+                        <h3>{{ pokemonSelecionado.nome }}</h3>
+                        <p class="id-modal">ID: {{ pokemonSelecionado.id }}</p>
+
+                        <div class="pokemon-tipo-modal">
+                            <span v-for="tipo in pokemonSelecionado.tipos" :key="tipo" class="poketipo">{{ tipo }}</span>
+                        </div>
+                    </div>
+                
+                    <div class="seletores">
+                            <div>
+                                <h6>Presente nos jogos:</h6>
+                                <select id="">
+                                    <option v-for="game in pokemonSelecionado.games" :key="game">{{ game }}</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <h6>Habilidades:</h6>
+                                <select id="">
+                                    <option v-for="habilidade in pokemonSelecionado.poderes" :key="habilidade">{{ habilidade }}</option>
+                                </select>
+                            </div>
+                    </div>
+                </div>
+                <button class="btn-modal" @click="fecharModal">Fechar</button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -189,4 +263,58 @@ const filtroPokemon = computed(() => {
         border: none;
     }
 
+    .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .modal-conteudo {
+    width: 100%;
+    max-width: 600px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .info-geral{
+    display: flex;
+    gap: 1rem;
+  }
+
+  .seletores{
+    display: flex;
+    gap: 32px;
+  }
+
+  .poke-info{
+    width: 100%;
+    max-width: 130px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .pokemon-tipo-modal{
+    display: flex;
+    gap: 8px;
+  }
+
+  .btn-modal{
+    max-width: 100%;
+  }
+
+  .id-modal{
+    font-size: 14px;
+    color: #343232;
+  }
 </style>
