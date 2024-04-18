@@ -48,18 +48,19 @@ const filtroPokemon = computed(() => {
     }
     return pokeCards.value;
 });
+
 </script>
 
 <template>
     <div class="conteudo-principal">
 
-        <input type="text" placeholder="Digite o nome ou id do Pokémon" v-model="campoDeBusca">
+        <input type="text" placeholder="Digite o nome, id ou o tipo do Pokémon" v-model="campoDeBusca">
 
         <ul class="pokemon-list">
             <li v-for="pokemon in filtroPokemon" :key="pokemon.id" class="card">
-                    <img :src="pokemon.imagem" :alt="'este pokémon é o: ' + pokemon.nome" /> 
+                <img :src="pokemon.imagem" :alt="'este pokémon é o: ' + pokemon.nome" /> 
 
-                    <div class="pokemon-info">  
+                <div class="pokemon-info">  
                         <h4>{{ pokemon.nome }}</h4> 
                         <p>ID: {{ pokemon.id }}</p>  
 
@@ -68,7 +69,7 @@ const filtroPokemon = computed(() => {
                                 {{pokemon.tipo}}
                             </span>
                         </div>
-                    </div>
+                </div>
 
                 <button>Ver Detalhes</button>
             </li>
@@ -84,9 +85,9 @@ const filtroPokemon = computed(() => {
     }
 
     .conteudo-principal ul{
-        display: flex;
-        flex-wrap: wrap;
-        gap: .75rem;
+        display: grid;
+        grid-template-columns:  repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
     }
 
     .card{
@@ -103,8 +104,8 @@ const filtroPokemon = computed(() => {
         margin-top: 28px;
         margin-bottom: 8px;
         width: 100%;
-        max-width: 80px;
-        height: 60px;
+        max-width: 100px;
+        height: 100px;
     }
 
     .pokemon-info{
@@ -163,7 +164,7 @@ const filtroPokemon = computed(() => {
 
     input{ 
         width: 100%;
-        max-width: 1050px;
+        max-width: 1274px;
         margin-top: 1.5rem;
         background-color: #4B4B4D;
         height: 24px;
