@@ -2,7 +2,9 @@
   <Header/>
 
   <div class="container">
+
     <Card/>
+  
   </div>
   
   

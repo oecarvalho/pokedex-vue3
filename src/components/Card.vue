@@ -15,11 +15,13 @@ onMounted(async ()=>{
                 const pokeDados = await axios.get(urlDetalhes);
                 const { name, id, sprites, types } = pokeDados.data;
 
+                const tipos = types.map(type => type.type.name);
+
                 const pokeCard = {//objeto com os dados necessários do pokémon
                     nome: name,
                     id: id,
                     imagem: sprites.front_default,
-                    tipo: types[0].type.name
+                    tipos: tipos
                 };
                 pokeCards.value.push(pokeCard);
             })
@@ -42,7 +44,7 @@ const filtroPokemon = computed(() => {
         } else {
             return pokeCards.value.filter(pokemon =>
                 pokemon.nome.toLowerCase().includes(busca) ||
-                pokemon.tipo.toLowerCase().includes(busca)
+                pokemon.tipos.some(tipo => tipo.toLowerCase().includes(busca))
             );
         }
     }
@@ -65,9 +67,7 @@ const filtroPokemon = computed(() => {
                         <p>ID: {{ pokemon.id }}</p>  
 
                         <div class="pokemon-tipo">
-                            <span class="poketipo">  
-                                {{pokemon.tipo}}
-                            </span>
+                            <span v-for="tipo in pokemon.tipos" :key="tipo" class="poketipo">{{ tipo }}</span>
                         </div>
                 </div>
 
