@@ -42,4 +42,10 @@
         font-size: .875rem;
     }
 
+    @media (max-width: 1000px){
+        .header-content{
+            padding: 1rem;
+        }
+    }
+
 </style>

@@ -295,9 +295,6 @@ const larguraStatus = computed(() => {
         padding: 1rem;
         border-radius: .5rem;
         color: white;
-        background-image: url('/src/assets/search.svg');
-        background-repeat: no-repeat;
-        background-position: center right 1.25rem;
         border: none;
         margin-bottom: 36px;
         margin-left: auto;
@@ -397,4 +394,23 @@ const larguraStatus = computed(() => {
     width: 100%;
     height: 8px;
   }
+
+  @media (max-width: 1000px){
+    input{
+        max-width: 440px;
+    }
+
+    .pokemon-list{
+       justify-items: center;
+    }
+  }
+
+  @media (max-width: 480px){
+    input{
+        max-width: 300px;
+    }
+  }
+
+
+
 </style>
