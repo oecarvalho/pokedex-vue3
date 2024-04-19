@@ -13,12 +13,13 @@ onMounted(async ()=>{
             pokemons.map(async (pokemon) => {
                 const urlDetalhes = pokemon.url; //acessando a url de detalhes dos pokémons
                 const pokeDados = await axios.get(urlDetalhes);
-                const { name, id, sprites, types, game_indices, abilities } = pokeDados.data;
+                const { name, id, sprites, types, game_indices, abilities, stats } = pokeDados.data;
 
                 const tipos = types.map(type => type.type.name);
                 const game = game_indices.map(games => games.version.name);
                 const habilidades = abilities.map(ability => ability.ability.name)
 
+                const pokeStatus = stats.map(stats => stats.base_stat)
                 
                 //objeto com os dados necessários do pokémon
                 const pokeCard = {
@@ -29,7 +30,8 @@ onMounted(async ()=>{
                     tipos: tipos,
                     games: game,
                     poderes: habilidades,
-                    evolucoes: []
+                    evolucoes: [],
+                    status: pokeStatus
                 };
 
                 const chainResponse = await axios.get(pokeDados.data.species.url);
@@ -58,29 +60,6 @@ onMounted(async ()=>{
     }
 
 })
-
-//tentativa de verificar as evoluções dos pokémons
-// onMounted(async ()=>{ 
-//     try {
-//         const response = await axios.get('https://pokeapi.co/api/v2/evolution-chain/');
-//         const evolucoes = response.data.results
-        
-//         await Promise.all(
-//             evolucoes.map(async (pokemon) => {
-//                 const urlEvolucaoDetalhes = pokemon.url; 
-//                 const pokeDadosEvoluidos = await axios.get(urlEvolucaoDetalhes);
-//                 const pokeEvolucao = pokeDadosEvoluidos.data.chain.evolves_to[0].species.name;
-//                 console.log(pokeEvolucao)
-                
-//             })
-//         );
-        
-//     } catch (error) {
-//         console.error('Erro ao listar os pokémons:2', error); 
-//     }
-// })
-
-
 
 let campoDeBusca = ref('');
 
@@ -112,6 +91,16 @@ const abrirModal = (pokemon) => {
 const fecharModal = () => {
     modalAberto.value = false;
 };
+
+const calcularWidth = (valor) => {
+  return valor + '%';
+};
+
+const larguraStatus = computed(() => {
+  return {
+    width: calcularWidth(pokemonSelecionado.status[0]),
+  };
+});
 
 </script>
 
@@ -151,7 +140,8 @@ const fecharModal = () => {
                         </div>
                     </div>
                 
-                    <div class="seletores">
+                    <div class="info-pokemons-modal">
+                        <div class="seletores">
                             <div>
                                 <h6>Presente nos jogos:</h6>
                                 <select id="">
@@ -172,6 +162,33 @@ const fecharModal = () => {
                                     <option v-for="(evolucao, index) in pokemonSelecionado.evolucoes" :key="index">{{ evolucao }}</option>
                                 </select>
                            </div>
+                    </div>
+
+                    <div class="status">
+                        <h6>Status</h6>
+                        <ul>
+                            <li>
+                                <p>Hp:</p>
+                                <span v-bind:style="{ width: calcularWidth(pokemonSelecionado.status[0]) }"></span>
+                            </li>
+                            <li>
+                                <p>Attack:</p>
+                                <span v-bind:style="{ width: calcularWidth(pokemonSelecionado.status[1]) }"></span>
+                            </li>
+                            <li>
+                                <p>Defense:</p>
+                                <span v-bind:style="{ width: calcularWidth(pokemonSelecionado.status[2]) }"></span>
+                            </li>
+                            <li>
+                                <p>Special Attack:</p>
+                                <span v-bind:style="{ width: calcularWidth(pokemonSelecionado.status[3]) }"></span>
+                            </li>
+                            <li>
+                                <p>Speed:</p>
+                                <span v-bind:style="{ width: calcularWidth(pokemonSelecionado.status[4]) }"></span>
+                            </li>
+                        </ul>
+                    </div>
                     </div>
 
 
@@ -347,5 +364,32 @@ const fecharModal = () => {
   .id-modal{
     font-size: 14px;
     color: #343232;
+  }
+
+  .info-pokemons-modal{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 20px;
+  }
+
+
+  .status ul li{
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+  }
+
+  .status ul li p{
+    margin-bottom: 0;
+    color: #4B4B4D;
+    width: 60px;
+  }
+
+  .status ul li span{
+    display: block;
+    background-color: red;
+    width: 100%;
+    height: 8px;
   }
 </style>
