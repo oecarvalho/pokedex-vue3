@@ -144,7 +144,7 @@ const larguraStatus = computed(() => {
                     <div class="info-pokemons-modal">
                         <div class="seletores">
                             <div>
-                                <h6>Presente nos jogos:</h6>
+                                <h6>Jogos:</h6>
                                 <select id="">
                                     <option v-for="game in pokemonSelecionado.games" :key="game">{{ game }}</option>
                                 </select>
@@ -402,6 +402,17 @@ const larguraStatus = computed(() => {
 
     .pokemon-list{
        justify-items: center;
+    }
+  }
+
+  @media (max-width: 500px){
+    .info-geral {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .modal-conteudo{
+        max-width: 350px;
     }
   }
 
