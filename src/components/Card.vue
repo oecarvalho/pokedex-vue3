@@ -105,7 +105,8 @@ const larguraStatus = computed(() => {
 </script>
 
 <template>
-    <div class="conteudo-principal">
+    <div class="container">
+        <div class="conteudo-principal">
 
         <input type="text" placeholder="Digite o nome, id ou o tipo do Pokémon" v-model="campoDeBusca">
 
@@ -156,12 +157,12 @@ const larguraStatus = computed(() => {
                                 </select>
                             </div>
 
-                           <div>
+                        <div>
                             <h6>Evoluções:</h6>
                                 <select>
                                     <option v-for="(evolucao, index) in pokemonSelecionado.evolucoes" :key="index">{{ evolucao }}</option>
                                 </select>
-                           </div>
+                        </div>
                     </div>
 
                     <div class="status">
@@ -195,6 +196,7 @@ const larguraStatus = computed(() => {
                 </div>
                 <button class="btn-modal" @click="fecharModal">Fechar</button>
             </div>
+        </div>
         </div>
     </div>
 </template>
@@ -286,7 +288,7 @@ const larguraStatus = computed(() => {
 
     input{ 
         width: 100%;
-        max-width: 1274px;
+        max-width: 1000px;
         margin-top: 1.5rem;
         background-color: #4B4B4D;
         height: 24px;
@@ -298,6 +300,8 @@ const larguraStatus = computed(() => {
         background-position: center right 1.25rem;
         border: none;
         margin-bottom: 36px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     input::placeholder{

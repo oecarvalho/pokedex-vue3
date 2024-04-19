@@ -28,7 +28,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 12px 0;
+        padding: 1rem 0;
     }
 
     .header-content ul{
