@@ -3,11 +3,7 @@
         <div class="container">
            <div class="header-content">
                 <img src="/src/assets/pokelogo.svg" alt="">
-                <ul>
-                    <li><a href="#">Português BR</a></li>
-                    <li><a href="#">Espanhol</a></li>
-                    <li><a href="#">Inglês</a></li>
-                </ul>
+                
            </div>
         </div>
     </header>
