@@ -20,18 +20,39 @@ onMounted(async ()=>{
                 const habilidades = abilities.map(ability => ability.ability.name)
 
                 
-
-                const pokeCard = {//objeto com os dados necessários do pokémon
+                //objeto com os dados necessários do pokémon
+                const pokeCard = {
+                    indice: pokemons.indexOf(pokemon),
                     nome: name,
                     id: id,
                     imagem: sprites.front_default,
                     tipos: tipos,
                     games: game,
-                    poderes: habilidades
+                    poderes: habilidades,
+                    evolucoes: []
                 };
+
+                const chainResponse = await axios.get(pokeDados.data.species.url);
+                const evolutionChain = chainResponse.data.evolution_chain.url;
+                const evolutionData = await axios.get(evolutionChain);
+                const evolutions = evolutionData.data.chain;
+
+                const getEvolutions = (chain) => {
+                    const evolutions = [];
+                    let current = chain;
+                    while (current && current.species) {
+                        evolutions.push(current.species.name);
+                        current = current.evolves_to[0];
+                    }
+                    return evolutions;
+                };
+
+                pokeCard.evolucoes = getEvolutions(evolutions);
+
                 pokeCards.value.push(pokeCard);
             })
         );
+        pokeCards.value.sort((a, b) => a.indice - b.indice);
     } catch (error) {
         console.error('Erro ao listar os pokémons:', error);
     }
@@ -58,6 +79,7 @@ onMounted(async ()=>{
 //         console.error('Erro ao listar os pokémons:2', error); 
 //     }
 // })
+
 
 
 let campoDeBusca = ref('');
@@ -143,7 +165,16 @@ const fecharModal = () => {
                                     <option v-for="habilidade in pokemonSelecionado.poderes" :key="habilidade">{{ habilidade }}</option>
                                 </select>
                             </div>
+
+                           <div>
+                            <h6>Evoluções:</h6>
+                                <select>
+                                    <option v-for="(evolucao, index) in pokemonSelecionado.evolucoes" :key="index">{{ evolucao }}</option>
+                                </select>
+                           </div>
                     </div>
+
+
                 </div>
                 <button class="btn-modal" @click="fecharModal">Fechar</button>
             </div>
