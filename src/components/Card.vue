@@ -383,7 +383,8 @@ const larguraStatus = computed(() => {
   .status ul li p{
     margin-bottom: 0;
     color: #4B4B4D;
-    width: 60px;
+    width: 100%;
+    max-width: 60px;
   }
 
   .status ul li span{
